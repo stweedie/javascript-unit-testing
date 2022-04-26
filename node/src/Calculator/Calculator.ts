@@ -11,7 +11,7 @@ export class Calculator {
 	}
 
 	// throws CalculatorError if invalid
-	static parseNumber(name: string, value: any): number | never {
+	static parseNumber(name: string, value: any): number {
 		if (value === undefined || value === null) throw new CalculatorError(name, value);
 		if (typeof value !== "string" && typeof value !== "number") throw new CalculatorError(name, value);
 
