@@ -1,4 +1,4 @@
-import { Calculator } from "../Calculator/Calculator";
+import { Calculator } from "./Calculator";
 
 // https://jestjs.io/docs/setup-teardown#scoping
 describe("Calculator", () => {
@@ -9,6 +9,11 @@ describe("Calculator", () => {
 
 		it("1 + 2 == 3", () => verifyAdd(new Calculator(), 1, 2, 3));
 		it("-1 + 0 == -1", () => verifyAdd(new Calculator(), -1, 0, -1));
-		it("-1 + -1 == -2", () => verifyAdd(new Calculator(), -1, -1, -2))
+    it("-1 + -1 == -2", () => verifyAdd(new Calculator(), -1, -1, -2));
+
+		// rewrite to handle thrown exceptions
+		it("'null' + 1 should throw", () => {
+			expect(() => new Calculator().add(null, 1)).toThrowError();
+		});
 	});
 });
