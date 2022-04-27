@@ -9,7 +9,7 @@
             todoItems.error
           }}</template>
           <template v-if="!todoItems.isLoading && !todoItems.error">
-            <template v-for="(item, index) of todoItems.data?.slice(0, 5)" :key="index">
+            <template v-for="(item, index) of todoItems.data" :key="index">
               <TodoListItem :item="item" />
             </template>
           </template>
