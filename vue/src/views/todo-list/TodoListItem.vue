@@ -26,6 +26,7 @@ export default defineComponent({
 		}
 	},
 	methods: {
+		// couldn't use v-model because value was "on" somehow?
 		changeItem() {
 			this.item.completed = !this.item.completed;
 			this.$emit("onChanged", this.item);

@@ -2,28 +2,29 @@ import PlaceholderService from "./PlaceholderService";
 import { Todo } from "./Todo";
 import TodoListService from "./TodoListService";
 
-// class JestMockPlaceholderService implements PlaceholderService {
-// 	_mockGetAllTodos = jest.fn(() => Promise.resolve([]));
-// 	_mockGetTodo = jest.fn((id) => Promise.resolve({
-// 		id,
-// 		userId: id,
-// 		title: "Some fake todo item",
-// 		completed: false
-// 	}));
+// https://jestjs.io/docs/mock-functions
+class JestMockPlaceholderService implements PlaceholderService {
+	_mockGetAllTodos = jest.fn(() => Promise.resolve([]));
+	_mockGetTodo = jest.fn((id) => Promise.resolve({
+		id,
+		userId: id,
+		title: "Some fake todo item",
+		completed: false
+	}));
 
-// 	getAllTodos(): Promise<Todo[]> {
-// 		return this._mockGetAllTodos();
-// 	}
+	getAllTodos(): Promise<Todo[]> {
+		return this._mockGetAllTodos();
+	}
 
-// 	getTodo(id: number): Promise<Todo> {
-// 		return this._mockGetTodo(id);
-// 	}
+	getTodo(id: number): Promise<Todo> {
+		return this._mockGetTodo(id);
+	}
 
-// 	reset() {
-// 		this._mockGetAllTodos.mockRestore();
-// 		this._mockGetTodo.mockRestore();
-// 	}
-// }
+	reset() {
+		this._mockGetAllTodos.mockRestore();
+		this._mockGetTodo.mockRestore();
+	}
+}
 
 class FakePlaceholderService implements PlaceholderService {
 	private createFakeTodo(id: number, completed: boolean = false): Todo {
@@ -49,33 +50,60 @@ class FakePlaceholderService implements PlaceholderService {
 }
 
 describe("TodoListService", () => {
-	let todoListService: TodoListService;
-
 	// first try, using FakePlaceholderService
-	beforeEach(() => {
-		todoListService = new TodoListService(new FakePlaceholderService());
+	describe("using FakePlaceholderService", () => {
+		let todoListService: TodoListService;
+		beforeEach(() => {
+			todoListService = new TodoListService(new FakePlaceholderService());
+		});
+
+		describe("getTodoItem", () => {
+			it("should return null if id <= 0", async () => {
+				const result = await todoListService.getTodoItem(-123);
+				expect(result).toBe(null);
+			});
+
+			it("should not return null if id > 0", async () => {
+				const result = await todoListService.getTodoItem(1);
+				expect(result).not.toBe(null);
+			});
+		});
 	});
 
 	// second try, using JestMockPlaceholderService
-	/* let mockPlaceholderService: JestMockPlaceholderService;
-	beforeEach(() => {
-		mockPlaceholderService = new JestMockPlaceholderService();
-		todoListService = new TodoListService(mockPlaceholderService);
-	});
-
-	afterEach(() => {
-		mockPlaceholderService.reset();
-	}); */
-
-	describe("getTodoItem", () => {
-		it("should return null if id <= 0", async () => {
-			const result = await todoListService.getTodoItem(-123);
-			expect(result).toBe(null);
+	describe("using FakePlaceholderService", () => {
+		let mockPlaceholderService: JestMockPlaceholderService;
+		let todoListService: TodoListService;
+		beforeEach(() => {
+			mockPlaceholderService = new JestMockPlaceholderService();
+			todoListService = new TodoListService(mockPlaceholderService);
 		});
 
-		it("should not return null if id > 0", async () => {
-			const result = await todoListService.getTodoItem(1);
-			expect(result).not.toBe(null);
+		afterEach(() => {
+			mockPlaceholderService.reset();
+		});
+
+		describe("getTodoItem", () => {
+			it("should return null if id <= 0", async () => {
+				const result = await todoListService.getTodoItem(-123);
+				expect(result).toBe(null);
+				expect(mockPlaceholderService._mockGetTodo).not.toHaveBeenCalled();
+			});
+
+			it("should not return null if id > 0", async () => {
+				const result = await todoListService.getTodoItem(1);
+				expect(result).not.toBe(null);
+				expect(mockPlaceholderService._mockGetTodo).toHaveBeenCalled();
+			});
+
+			it("should re-throw any error", async () => {
+				const error = new Error("an error occurred");
+				mockPlaceholderService._mockGetTodo.mockRejectedValueOnce(error);
+
+				expect(() => todoListService.getTodoItem(1))
+					.rejects
+					.toThrow(error);
+			});
 		});
 	});
 });
