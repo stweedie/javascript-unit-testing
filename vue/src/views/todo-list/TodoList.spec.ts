@@ -118,7 +118,7 @@ describe("TodoList", () => {
 
 		it("should render a FakeTodoListItem for each item (using custom component + mount)", () => {
 			const FakeTodoListItem = defineComponent({
-				name: "FakeTodoItem",
+				name: "FakeTodoListItem",
 				props: {
 					item: {
 						type: Object,
@@ -154,35 +154,39 @@ describe("TodoList", () => {
 		});
 	});
 
-	// describe("removeItem", () => {
-	// 	it("should remove the item if it could be found", () => {
-	// 		const { component, items } = createComponent(5);
+	describe("removeItem", () => {
+		it("should remove the item if it could be found", () => {
+			const { component, items } = createComponent(5);
 
-	// 		component.vm.removeItem(items[0]);
-	// 		expect(component.vm.todoItems.data.length).toBe(4);
-	// 	});
+			component.vm.removeItem(items[0]);
+			expect(component.vm.todoItems.data.length).toBe(4);
+		});
 
-	// 	it("should not remove the item if it could not be found", () => {
-	// 		const { component, items } = createComponent(5);
+		it("should not remove the item if it could not be found", () => {
+			const { component, items } = createComponent(5);
 
-	// 		component.vm.removeItem(createFakeTodoItem(123));
-	// 		expect(component.vm.todoItems.data.length).toBe(5);
-	// 	});
-	// });
+			component.vm.removeItem(null);
+			expect(component.vm.todoItems.data.length).toBe(5);
+		});
 
-	// describe("addItem", () => {
-	// 	it("should add an item to todoItems if text is defined", () => {
-	// 		const { component, items } = createComponent(5);
+		it("should correctly render remaining elements", () => {
+			const { component, items } = createComponent(5);
+		});
+	});
 
-	// 		component.vm.addItem("a new todo list item");
-	// 		expect(component.vm.todoItems.data.length).toBe(6);
-	// 	});
+	describe("addItem", () => {
+		it("should add an item to todoItems if text is defined", () => {
+			const { component, items } = createComponent(5);
 
-	// 	it("should add NOT an item to todoItems if text is invalid", () => {
-	// 		const { component, items } = createComponent(5);
+			component.vm.addItem("a new todo list item");
+			expect(component.vm.todoItems.data.length).toBe(6);
+		});
 
-	// 		component.vm.addItem("");
-	// 		expect(component.vm.todoItems.data.length).toBe(5);
-	// 	});
-	// });
+		it("should add NOT an item to todoItems if text is invalid", () => {
+			const { component, items } = createComponent(5);
+
+			component.vm.addItem("");
+			expect(component.vm.todoItems.data.length).toBe(5);
+		});
+	});
 });

@@ -71,7 +71,7 @@ describe("TodoListService", () => {
 	});
 
 	// second try, using JestMockPlaceholderService
-	describe("using FakePlaceholderService", () => {
+	describe("using JestMockPlaceholderService", () => {
 		let mockPlaceholderService: JestMockPlaceholderService;
 		let todoListService: TodoListService;
 		beforeEach(() => {

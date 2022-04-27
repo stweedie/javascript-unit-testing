@@ -7,5 +7,5 @@ II. Vue
     * Introduction to web components (composition, reusability, inter-component communication)
     * Separation of business and presentation logic
     * basic HTML unit testing (text matches, element contains child element, callback is called on click event, etc)
-    * Snapshot HTML testing
-    * VERY basic Mirage demonstration
+    <!-- * Snapshot HTML testing -->
+    <!-- * VERY basic Mirage demonstration -->

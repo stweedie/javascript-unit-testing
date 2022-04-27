@@ -54,6 +54,8 @@ export default defineComponent({
   },
   methods: {
     addItem(title: string) {
+      if (!title || !title.length) return;
+
       // type safety?
       const id = this.todoItems.data?.length ?? 0 + 1;
       this.todoItems.data?.push({
@@ -66,8 +68,11 @@ export default defineComponent({
       this.newItemText = "";
     },
     removeItem(item: Todo) {
-      // type safety?
-      this.todoItems.data!.splice(this.todoItems.data!.indexOf(item), 1);
+      if (!item || !this.todoItems.data) return;
+      const index = this.todoItems.data.indexOf(item);
+      if (index < 0) return;
+
+      this.todoItems.data.splice(index, 1);
     },
   },
 });

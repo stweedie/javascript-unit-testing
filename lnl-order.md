@@ -16,4 +16,4 @@ vue
 7. TodoList spec Loading
 8. TodoList spec error
 9. TodoList spec shallow mount vs mount vs mount w/ component overrides
-
+10. TodoList TDD for Add / remove items
